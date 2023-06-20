@@ -21,19 +21,16 @@ struct OptionalArg_t
 	ValueType_t m_value{};
 };
 
-template<class ValueType_t, auto defaultValue, CompileTimeStringLiteral_t filenameTag, int lineNumberTag>
-struct OptionalArgWithDefault_t
-{
-	ValueType_t m_value = defaultValue;
-};
-
 /// These macros define option types, using the filename + line number to uniquify the type generated.
 
 #define DECLARE_OPTION( optionName, ValueType_t )						\
 	using optionName = OptionalArg_t<ValueType_t, __FILE__, __LINE__>;
 
-#define DECLARE_OPTION_DEFAULT( optionName, ValueType_t, defaultValue )		\
-	using optionName = OptionalArgWithDefault_t<ValueType_t, defaultValue, __FILE__, __LINE__>;
+#define DECLARE_OPTION_DEFAULT( optionName, ValueType_t, defaultValue )	\
+struct optionName														\
+{																		\
+	ValueType_t m_value = defaultValue;									\
+}
 
 
 //: Search functions for parameter packs:
